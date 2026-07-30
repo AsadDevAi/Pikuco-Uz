@@ -56,7 +56,7 @@ app.use('/api/top', topRoutes);
 app.use('/api/upload', uploadRoutes);
 
 app.get('/', (req, res) => {
-  res.send('Sinov API Server is running...');
+  res.status(200).json({ message: "Sinov API Server is running successfully!" });
 });
 
 app.get('/api/health', (_req, res) => {
