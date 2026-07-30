@@ -55,6 +55,10 @@ app.use('/api/squads', squadRoutes);
 app.use('/api/top', topRoutes);
 app.use('/api/upload', uploadRoutes);
 
+app.get('/', (req, res) => {
+  res.send('Sinov API Server is running...');
+});
+
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
