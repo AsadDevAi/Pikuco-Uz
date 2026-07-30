@@ -27,8 +27,12 @@ export const upsertRating = async (req: AuthRequest, res: Response, next: NextFu
       { upsert: true, new: true },
     );
 
-    const Model = targetType === 'test' ? Test : Post;
-    const target = await Model.findById(targetObjectId);
+    let target;
+    if (targetType === 'test') {
+      target = await Test.findById(targetObjectId);
+    } else {
+      target = await Post.findById(targetObjectId);
+    }
 
     if (target) {
       if (existing) {
@@ -40,7 +44,12 @@ export const upsertRating = async (req: AuthRequest, res: Response, next: NextFu
       await target.save();
 
       if (stars === 5 && !existing) {
-        const targetDoc = await Model.findById(targetObjectId).select('authorId');
+        let targetDoc;
+        if (targetType === 'test') {
+          targetDoc = await Test.findById(targetObjectId).select('authorId');
+        } else {
+          targetDoc = await Post.findById(targetObjectId).select('authorId');
+        }
         if (targetDoc && targetDoc.authorId.toString() !== userId) {
           await awardPoints(targetDoc.authorId.toString(), 'RECEIVE_5_STAR');
         }

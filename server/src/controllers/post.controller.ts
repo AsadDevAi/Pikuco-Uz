@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { Types } from 'mongoose';
+import { Types, SortOrder } from 'mongoose';
 import Post from '../models/Post';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { AppError } from '../middleware/errorHandler';
@@ -43,7 +43,7 @@ export const getPosts = async (req: AuthRequest, res: Response, next: NextFuncti
     if (authorId) query.authorId = new Types.ObjectId(authorId as string);
     if (search) query.title = { $regex: search, $options: 'i' };
 
-    const sortMap: Record<string, Record<string, number>> = {
+    const sortMap: Record<string, Record<string, SortOrder>> = {
       newest: { createdAt: -1 },
       popular: { viewsCount: -1 },
       top: { ratingSum: -1 },
